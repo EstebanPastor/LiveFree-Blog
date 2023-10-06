@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import NextAuthProvider from "@/providers/next-auth-provider";
 import NextThemeProvider from "@/providers/theme-provider";
 import GlobalState from "@/context";
+import Header from "@/components/header/Header";
 
 export const metadata: Metadata = {
   title: "NEXT Blog",
@@ -16,10 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="dark:bg-black">
         <NextThemeProvider>
           <NextAuthProvider>
-            <GlobalState>{children}</GlobalState>
+            <GlobalState>
+              <Header />
+              {children}
+            </GlobalState>
           </NextAuthProvider>
         </NextThemeProvider>
       </body>
