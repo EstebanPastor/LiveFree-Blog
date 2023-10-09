@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import Button from "../button/Button";
 import ThemeToggler from "../theme/ThemeToggler";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const [sticky, setSticky] = useState<boolean>(false);
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
   function handleStickyNavbar() {
     if (window.scrollY >= 80) setSticky(true);
@@ -93,11 +95,16 @@ export default function Header() {
                 </nav>
               </div>
               <div className="flex gap-4 items-center justify-end pr-16 lg:pr-0">
-           {
-            session !== null ?      <Button onClick={() => {}} text="Create" /> : null
-           }
+                {session !== null ? (
+                  <Button
+                    onClick={() => router.push("/create")}
+                    text="Create"
+                  />
+                ) : null}
                 <Button
-                  onClick={session !== null ? () => signOut() : () => signIn("github")}
+                  onClick={
+                    session !== null ? () => signOut() : () => signIn("github")
+                  }
                   text={session !== null ? "Logout" : "Login"}
                 />
                 <div className="flex gap-3 items-center">

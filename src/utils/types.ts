@@ -3,3 +3,17 @@ export interface MenuItem {
   label: string;
   path: string;
 }
+
+export interface Option {
+  value: string;
+  label: string;
+}
+
+export interface FormControlItem {
+  id: string;
+  label: string;
+  placeholder: string;
+  type: string;
+  component: string;
+  options: Option[];
+}
