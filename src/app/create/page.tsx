@@ -15,6 +15,7 @@ import Spinner from "@/components/spinner/Spinner";
 import { GlobalContext } from "@/context";
 import { BlogFormData } from "@/utils/types";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app, "gs://nextjs13-blog.appspot.com");
@@ -26,12 +27,13 @@ function createUniqueFileName(fileName: string) {
   return `${fileName}-${timeStamp}-${randomString}`;
 }
 
+
+
 export default function CreateBlog() {
   const [imageLoading, setImageLoading] = useState<boolean>(false);
   const { formData, setFormData } = useContext(GlobalContext);
   const { data: session } = useSession();
-
-  console.log(session, "session");
+  const router = useRouter();
 
   async function handleImageSaveToFireBase(file: any) {
     const extractUniqueFileName = createUniqueFileName(file?.name);
@@ -76,7 +78,7 @@ export default function CreateBlog() {
     const res = await fetch("/api/blog-post/add-post", {
       method: "POST",
       headers: {
-        "Content-Type" :"application/json",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         ...formData,
@@ -86,7 +88,10 @@ export default function CreateBlog() {
       }),
     });
     const data = await res.json();
-    console.log(data, "data123")
+
+    if(data && data.success) {
+        router.push("/blogs")
+    }
   }
 
   return (
