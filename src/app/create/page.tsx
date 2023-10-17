@@ -14,6 +14,7 @@ import { useContext, useState } from "react";
 import Spinner from "@/components/spinner/Spinner";
 import { GlobalContext } from "@/context";
 import { BlogFormData } from "@/utils/types";
+import { useSession } from "next-auth/react";
 
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app, "gs://nextjs13-blog.appspot.com");
@@ -26,7 +27,12 @@ function createUniqueFileName(fileName: string) {
 }
 
 export default function CreateBlog() {
+  const [imageLoading, setImageLoading] = useState<boolean>(false);
   const { formData, setFormData } = useContext(GlobalContext);
+  const { data: session } = useSession();
+
+  console.log(session, "session");
+
   async function handleImageSaveToFireBase(file: any) {
     const extractUniqueFileName = createUniqueFileName(file?.name);
     const storageRef = ref(storage, `blog/${extractUniqueFileName}`);
@@ -45,13 +51,10 @@ export default function CreateBlog() {
       );
     });
   }
-  const [imageLoading, setImageLoading] = useState<boolean>(false);
 
   async function handleBlogImageChange(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
-    console.log(event.target.files);
-
     if (!event.target.files) return;
     setImageLoading(true);
 
@@ -61,7 +64,7 @@ export default function CreateBlog() {
 
     if (saveImageToFirebase !== "") {
       setImageLoading(false);
-      console.log(saveImageToFirebase, "saveImageToFirebase");
+
       setFormData({
         ...formData,
         image: saveImageToFirebase,
@@ -69,7 +72,22 @@ export default function CreateBlog() {
     }
   }
 
-  console.log(formData, "formData");
+  async function handleSaveBlogPost() {
+    const res = await fetch("/api/blog-post/add-post", {
+      method: "POST",
+      headers: {
+        "Content-Type" :"application/json",
+      },
+      body: JSON.stringify({
+        ...formData,
+        userid: session?.user?.name,
+        userimage: session?.user?.image,
+        comments: [],
+      }),
+    });
+    const data = await res.json();
+    console.log(data, "data123")
+  }
 
   return (
     <section className="overflow-hidden py-16 md:py-20 lg:py-28">
@@ -116,7 +134,9 @@ export default function CreateBlog() {
                             type={control.type}
                             placeholder={control.placeholder}
                             name={control.id}
-                            onChange={(event : React.ChangeEvent<HTMLInputElement>) => {
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
                               setFormData({
                                 ...formData,
                                 [control.id]: event.target.value,
@@ -131,7 +151,9 @@ export default function CreateBlog() {
                             placeholder={control.placeholder}
                             rows={5}
                             name={control.id}
-                            onChange={(event : React.ChangeEvent<HTMLTextAreaElement>) => {
+                            onChange={(
+                              event: React.ChangeEvent<HTMLTextAreaElement>
+                            ) => {
                               setFormData({
                                 ...formData,
                                 [control.id]: event.target.value,
@@ -144,7 +166,9 @@ export default function CreateBlog() {
                           <select
                             name={control.id}
                             placeholder={control.placeholder}
-                            onChange={(event : React.ChangeEvent<HTMLSelectElement>) => {
+                            onChange={(
+                              event: React.ChangeEvent<HTMLSelectElement>
+                            ) => {
                               setFormData({
                                 ...formData,
                                 [control.id]: event.target.value,
@@ -170,7 +194,10 @@ export default function CreateBlog() {
                       </div>
                     ))}
                     <div className="w-full px-4">
-                      <Button text="Create a new blog" onClick={() => {}} />
+                      <Button
+                        text="Create a new blog"
+                        onClick={handleSaveBlogPost}
+                      />
                     </div>
                   </div>
                 </div>

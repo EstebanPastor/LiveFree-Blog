@@ -38,3 +38,5 @@ next-env.d.ts
 # env api
 src/app/api/auth/
 
+#env prisma
+.env
