@@ -5,22 +5,39 @@ import Button from "@/components/button/Button";
 import { GlobalContext } from "@/context";
 import { Blog } from "@/utils/types";
 import { useContext } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Search() {
   const { searchResults, setSearchQuery, setSearchResults, searchQuery } =
     useContext(GlobalContext);
 
-  async function handleSearch() {
-    const res = await fetch(`/api/search?query=${searchQuery}`, {
+  const router = useRouter();
+
+  async function helperFunctionToFetchSearchResults(query: string) {
+    const res = await fetch(`/api/search?query=${query}`, {
       method: "GET",
       cache: "no-store",
     });
     const data = await res.json();
 
     if (data.success) {
-      setSearchQuery("");
       setSearchResults(data.data);
     }
+  }
+
+  async function handleSearch() {
+    helperFunctionToFetchSearchResults(searchQuery);
+  }
+
+  async function handleDelete(id: number) {
+    const res = await fetch(`api/blog-post/delete-post?id=${id}`, {
+      method: "DELETE",
+      cache: "no-store",
+    });
+
+    const data = await res.json();
+
+    if (data && data.success) helperFunctionToFetchSearchResults(searchQuery);
   }
 
   return (
@@ -63,7 +80,10 @@ export default function Search() {
                       key={searchBlogItem.id}
                       className="w-full px-4 md:w-2/3 lg:w-1/2 xl:w-1/3"
                     >
-                      <SingleBlog blogItem={searchBlogItem} />
+                      <SingleBlog
+                        handleDelete={handleDelete}
+                        blogItem={searchBlogItem}
+                      />
                     </div>
                   ))
                 ) : (

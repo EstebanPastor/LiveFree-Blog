@@ -4,8 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import {FaTrash} from "react-icons/fa"
 
-export default function SingleBlog({ blogItem }: { blogItem: Blog }) {
-  const { image, category, title, description, userimage, userid } = blogItem;
+export default function SingleBlog({ blogItem, handleDelete }: { blogItem: Blog, handleDelete : (id: number) => {} }) {
+  const { image, category, title, description, userimage, userid, id } = blogItem;
   const {data: session} = useSession()
 
   
@@ -48,7 +48,7 @@ export default function SingleBlog({ blogItem }: { blogItem: Blog }) {
             </div>
             <div>
                 {
-                 session !== null && session?.user?.name === userid ? <FaTrash size={30} className="cursor-pointer"/> : null
+                 session !== null && session?.user?.name === userid ? <FaTrash onClick={() => handleDelete(id)} size={30} className="cursor-pointer"/> : null
                  }
             </div>
           </div>
