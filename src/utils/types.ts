@@ -17,3 +17,10 @@ export interface FormControlItem {
   component: string;
   options: Option[];
 }
+
+export interface BlogFormData {
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+}
