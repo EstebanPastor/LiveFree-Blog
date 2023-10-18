@@ -9,12 +9,11 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { GlobalContext } from "@/context";
 
-
 export default function Header() {
   const [sticky, setSticky] = useState<boolean>(false);
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
   const { data: session } = useSession();
-  const {setSearchResults} = useContext(GlobalContext)
+  const { setSearchResults } = useContext(GlobalContext);
   const router = useRouter();
   const pathName = usePathname();
 
@@ -32,13 +31,13 @@ export default function Header() {
   });
 
   useEffect(() => {
-    setSearchResults([])
+    setSearchResults([]);
   }, [pathName]);
 
   return (
     <div>
       <header
-        className={`top-0 left-0 flex w-full items-center bg-transparent ${
+        className={`top-0 left-0 flex w-full z-40 items-center bg-transparent ${
           sticky
             ? "!fixed !z-[9999] !bg-white !bg-opacity-80 shadow-sticky backdrop:blur-sm !transition dark:!bg-primary dark:!bg-opacity-20"
             : "absolute"
@@ -120,9 +119,7 @@ export default function Header() {
                 </div>
               </div>
             </div>
-        
           </div>
-          
         </div>
       </header>
     </div>
