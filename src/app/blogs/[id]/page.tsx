@@ -9,17 +9,19 @@ async function extractBlogDetails(id: string) {
     `${process.env.URL}/api/blog-post/blog-details?blogID=${id}`,
     {
       method: "GET",
-      cache: "no-store",
+      next: {
+        revalidate: 0,
+      },
     }
   );
   const data = await res.json();
 
-  if(data.success) return data.data
+  if (data.success) return data.data;
 }
 
 export default async function BlogDetails({ params }: { params: Param }) {
-    const {id} = params;
-    
-    const blogData = await extractBlogDetails(id)
-  return <BlogDetailsHome blogData={blogData}/>;
+  const { id } = params;
+
+  const blogData = await extractBlogDetails(id);
+  return <BlogDetailsHome blogData={blogData} />;
 }

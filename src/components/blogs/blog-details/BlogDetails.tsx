@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function BlogDetailsHome({ blogData }: { blogData: Blog }) {
   const [comment, setComment] = useState<string>("");
@@ -34,6 +34,13 @@ export default function BlogDetailsHome({ blogData }: { blogData: Blog }) {
       router.refresh();
     }
   }
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      router.refresh();
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   if (!blogData) return null;
   return (
@@ -89,20 +96,24 @@ export default function BlogDetailsHome({ blogData }: { blogData: Blog }) {
               </div>
             </div>
             <div className="w-full lg:w-8/12 flex gap-4">
-              <input
-                type="text"
-                name="comment"
-                id="comment"
-                autoFocus
-                autoComplete="off"
-                placeholder="Add your comment here"
-                value={comment}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setComment(event.target.value)
-                }
-                className="w-full rounded-md border-transparent py-3 px-6 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-opacity-50"
-              />
-              <Button text="Add" onClick={handleCommentSave} />
+              {session !== null ? (
+                <>
+                  <input
+                    type="text"
+                    name="comment"
+                    id="comment"
+                    autoFocus
+                    autoComplete="off"
+                    placeholder="Add your comment here"
+                    value={comment}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      setComment(event.target.value)
+                    }
+                    className="w-full rounded-md border-transparent py-3 px-6 text-base text-body-color placeholder-body-color shadow-one outline-none focus:border-primary focus-visible:shadow-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-opacity-50"
+                  />
+                  <Button text="Add" onClick={handleCommentSave} />
+                </>
+              ) : null}
             </div>
             <section className="dark:bg-gray-900 py-8 lg:py-16 w-full lg:w-8/12">
               <div className="flex justify-between items-center mb-6 ">
@@ -124,7 +135,7 @@ export default function BlogDetailsHome({ blogData }: { blogData: Blog }) {
                           </div>
                         </div>
                         <p className="text-gray-500 dark:text-gray-400 ">
-                                {comment.split("|")[0]}
+                          {comment.split("|")[0]}
                         </p>
                       </div>
                     ))
