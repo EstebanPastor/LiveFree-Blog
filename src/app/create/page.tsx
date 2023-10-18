@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@/components/button/Button";
-import { formControls } from "@/utils";
+import { formControls, initialBlogFormData } from "@/utils";
 import { initializeApp } from "firebase/app";
 import firebaseConfig from "../../../firebase.config";
 import {
@@ -26,8 +26,6 @@ function createUniqueFileName(fileName: string) {
 
   return `${fileName}-${timeStamp}-${randomString}`;
 }
-
-
 
 export default function CreateBlog() {
   const [imageLoading, setImageLoading] = useState<boolean>(false);
@@ -89,8 +87,9 @@ export default function CreateBlog() {
     });
     const data = await res.json();
 
-    if(data && data.success) {
-        router.push("/blogs")
+    if (data && data.success) {
+      setFormData(initialBlogFormData);
+      router.push("/blogs");
     }
   }
 
