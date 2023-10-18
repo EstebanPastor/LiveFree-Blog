@@ -9,11 +9,12 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import { GlobalContext } from "@/context";
 
+
 export default function Header() {
   const [sticky, setSticky] = useState<boolean>(false);
   const [navbarOpen, setNavbarOpen] = useState<boolean>(false);
   const { data: session } = useSession();
-  const {setSearchQuery ,setSearchResults} = useContext(GlobalContext)
+  const {setSearchResults} = useContext(GlobalContext)
   const router = useRouter();
   const pathName = usePathname();
 
@@ -32,7 +33,6 @@ export default function Header() {
 
   useEffect(() => {
     setSearchResults([])
-    setSearchQuery("")
   }, [pathName]);
 
   return (
@@ -53,7 +53,7 @@ export default function Header() {
                   sticky ? "py-5 lg:py-2" : "py-8"
                 }`}
               >
-                NEXT Blog
+                Home
               </Link>
             </div>
             <div className="flex w-full items-center justify-between px-4">
@@ -120,7 +120,9 @@ export default function Header() {
                 </div>
               </div>
             </div>
+        
           </div>
+          
         </div>
       </header>
     </div>

@@ -8,7 +8,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "avatars.githubusercontent.com"
+        hostname: "avatars.githubusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.mos.cms.futurecdn.net"
       }
     ],
   },
