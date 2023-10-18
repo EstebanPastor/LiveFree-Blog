@@ -1,26 +1,24 @@
 import prisma from "@/database";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function PUT(request: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const extractData = await request.json();
-    const updatedBlogPost = await prisma.post.update({
+    const url = new URL(req.url);
+    const blogID = url.searchParams.get("blogID");
+    const blogDetails = await prisma.post.findUnique({
       where: {
-        id: Number(extractData.id),
-      },
-      data: {
-        comments: extractData.comments,
+        id: Number(blogID),
       },
     });
-    if (updatedBlogPost) {
+    if (blogDetails) {
       return NextResponse.json({
         success: true,
-        message: "Blog post updated successfully",
+        data: blogDetails,
       });
-    }else {
+    } else {
       return NextResponse.json({
         success: false,
-        message: "Something went wrong while updating the blog...",
+        message: "Something went wrong...",
       });
     }
   } catch (error) {

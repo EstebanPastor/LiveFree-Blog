@@ -49,7 +49,7 @@ export default function CategoryList({ list }: { list: Blog[] }) {
                       />
                     </div>
                   </div>
-                  <p className="mb-8 leading-relaxed text-base font-medium text-body-color sm:text-lg lg:text-base xl:text-lg ">
+                  <p className="mb-8 leading-relaxed text-base font-medium text-body-color sm:text-lg lg:text-base xl:text-lg">
                     {getLatestBlogForCurrentCategory?.description}
                   </p>
                 </div>

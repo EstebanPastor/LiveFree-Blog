@@ -12,7 +12,7 @@ export default function SingleBlog({ blogItem, handleDelete }: { blogItem: Blog,
   return (
     <div>
       <div className="relative overflow-hidden rounded-md bg-white shadow-one dark:bg-dark">
-        <Link className="relative block h-[250px] w-full" href={`/`}>
+        <Link className="relative block h-[250px] w-full" href={`/blogs/${id}`}>
           <span className="absolute top-6 right-6 z-20 inline-flex items-center justify-center rounded-full bg-primary py-2 px-4 text-sm font-semibold capitalize text-white">
             {category}
           </span>
@@ -23,7 +23,7 @@ export default function SingleBlog({ blogItem, handleDelete }: { blogItem: Blog,
         <h3>
           <Link
             className="mb-5 text-ellipsis overflow-hidden whitespace-nowrap block text-xl font-bold text-black hover:text-primary dark:text-white dark:hover:text-primary sm:text-2xl"
-            href={`/`}
+            href={`/blogs/${id}`}
           >
             {title}
           </Link>
